@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Raqeeb</title>
+  <style>
+    @font-face {
+      font-family: 'Papyrus';
+      src: local('Papyrus');
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #f6c1d1; /* pastel pink */
+      color: white;
+      font-family: Papyrus, fantasy;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 90%;
+      max-width: 700px;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    h1, p {
+      margin: 14px 0;
+      font-weight: normal;
+    }
+
+    .tap {
+      position: fixed;
+      bottom: 28px;
+      font-size: 14px;
+      opacity: 0.3;
+      animation: flicker 1.2s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.9; }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    button {
+      border: none;
+      padding: 14px 40px;
+      border-radius: 999px;
+      background: #d7a3d9; /* pastel purple */
+      color: white;
+      font-family: Papyrus, fantasy;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button.green {
+      background: #9fd9b3;
+    }
+
+    /* Maze */
+    .maze {
+      width: 280px;
+      height: 280px;
+      border: 3px solid white;
+      position: relative;
+      margin-top: 20px;
+    }
+
+    .char {
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+    }
+
+    .quiz button {
+      margin-top: 14px;
+      width: 100%;
+      max-width: 320px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INTRO SCREEN -->
+  <div class="screen active" id="screen1">
+    <h1 id="line1">For Raqeeb,</h1>
+    <p id="line2" style="display:none">Thank you for my 2025</p>
+    <p id="line3" style="display:none">I’m sorry for everything.</p>
+    <p id="line4" style="display:none">I still hope you’re okay.</p>
+    <div class="tap">tap to continue</div>
+  </div>
+
+  <!-- QUESTION SCREEN -->
+  <div class="screen" id="screen2">
+    <p>To perhaps make you feel better, I’ll give you 6 gifts.<br>you want to see?</p>
+    <div class="buttons">
+      <button id="yesBtn">yes</button>
+      <button id="noBtn">no</button>
+    </div>
+  </div>
+
+  <!-- PUZZLE INTRO -->
+  <div class="screen" id="screen3">
+    <p>Perrrrfect (just like you)<br>so for that you might need to complete two puzzles and get past it :3</p>
+    <div class="tap">tap</div>
+  </div>
+
+  <!-- MAZE -->
+  <div class="screen" id="screen4">
+    <p>puzzle 1</p>
+    <div class="maze">
+      <div class="char" id="char"></div>
+    </div>
+    <p style="font-size:14px">use arrow keys</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen quiz" id="screen5">
+    <p>what is the most favourite thing on this seartth?</p>
+    <p>1. Afeefa<br>2. Affy<br>3. Watermelon<br>4. Amo</p>
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>4</button>
+  </div>
+
+  <script>
+    let tapCount = 0;
+    const lines = ['line2','line3','line4'];
+
+    document.body.addEventListener('click', () => {
+      if (tapCount < lines.length) {
+        document.getElementById(lines[tapCount]).style.display = 'block';
+        tapCount++;
+      } else if (tapCount === lines.length) {
+        showScreen(2);
+        tapCount++;
+      }
+    });
+
+    function showScreen(n) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen'+n).classList.add('active');
+    }
+
+    // YES / NO logic
+    const yes = document.getElementById('yesBtn');
+    const no = document.getElementById('noBtn');
+
+    yes.onclick = () => {
+      yes.classList.add('green');
+      setTimeout(() => showScreen(3), 700);
+    };
+
+    no.onclick = () => {
+      yes.style.transform = 'scale(1.2)';
+      no.style.transform = 'scale(0.8)';
+    };
+
+    document.getElementById('screen3').onclick = () => showScreen(4);
+
+    // Maze movement
+    const char = document.getElementById('char');
+    let x = 5, y = 5;
+
+    document.addEventListener('keydown', e => {
+      const step = 10;
+      if (e.key === 'ArrowRight') x += step;
+      if (e.key === 'ArrowLeft') x -= step;
+      if (e.key === 'ArrowDown') y += step;
+      if (e.key === 'ArrowUp') y -= step;
+      char.style.left = x + 'px';
+      char.style.top = y + 'px';
+      if (x > 240 && y > 240) showScreen(5);
+    });
+
+    // Quiz – all correct
+    document.querySelectorAll('.quiz button').forEach(b => {
+      b.onclick = () => b.classList.add('green');
+    });
+  </script>
+
+</body>
+</html>
