@@ -35,6 +35,7 @@
 
   h1, h2, p {
     margin: 10px;
+    font-weight: 300;
   }
 
   .tap {
@@ -212,9 +213,12 @@
   }
 
   document.body.addEventListener('click', e => {
+    const hasTap = screens[current].querySelector('.tap');
+    if (!hasTap) return;
     if (screens[current].id === 's4') return;
     if (screens[current].id === 'q1' || screens[current].id === 'q2') return;
     if (current < screens.length - 1) show(current + 1);
+  });
   });
 
   let noScale = 1;
@@ -243,7 +247,7 @@
     };
   });
 
-  setTimeout(() => show(1), 1000);
+  
 </script>
 
 </body>
