@@ -212,8 +212,14 @@
     current = index;
   }
 
-  document.body.addEventListener('click', e => {
-    const hasTap = screens[current].querySelector('.tap');
+  document.addEventListener('click', e => {
+    const activeScreen = screens[current];
+    const hasTap = activeScreen.querySelector('.tap');
+    if (!hasTap) return;
+    if (activeScreen.id === 's4') return;
+    if (activeScreen.id === 'q1' || activeScreen.id === 'q2') return;
+    if (current < screens.length - 1) show(current + 1);
+  });
     if (!hasTap) return;
     if (screens[current].id === 's4') return;
     if (screens[current].id === 'q1' || screens[current].id === 'q2') return;
